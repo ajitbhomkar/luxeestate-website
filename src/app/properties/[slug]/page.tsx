@@ -7,12 +7,15 @@ import { PROPERTY_QUERY, PROPERTY_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
 
 export async function generateStaticParams() {
-  const { data } = await sanityFetch({
-    query: PROPERTY_SLUGS_QUERY,
-    perspective: 'published',
-    stega: false,
-  })
-  return data || []
+  try {
+    const { data } = await sanityFetch<Array<{ slug: string }>>({
+      query: PROPERTY_SLUGS_QUERY,
+    })
+    return data || []
+  } catch (error) {
+    console.error('Error generating static params:', error)
+    return []
+  }
 }
 
 type Props = {
