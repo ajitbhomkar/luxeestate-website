@@ -11,13 +11,15 @@ export async function sanityFetch<QueryResponse>({
   query: string
   params?: Record<string, any>
   tags?: string[]
-}) {
-  return client.fetch<QueryResponse>(query, params, {
+}): Promise<{ data: QueryResponse }> {
+  const data = await client.fetch<QueryResponse>(query, params, {
     next: {
       revalidate: 60, // Revalidate every 60 seconds
       tags,
     },
   })
+  
+  return { data }
 }
 
 // Placeholder component for live updates (can be enhanced later)
